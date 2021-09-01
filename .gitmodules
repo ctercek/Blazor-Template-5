@@ -1,0 +1,3 @@
+[submodule "src/btp/Initialization"]
+	path = src/btp/Initialization
+	url = https://github.com/ctercek/Blazor-Template-secrets.git
