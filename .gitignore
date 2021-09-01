@@ -17,7 +17,7 @@ userroles.json
 *.userprefs
 
 # Initialization Folder
-/src/website/btp/Initialization/**
+/src/btp/Initialization/**
 
 # Build results
 [Dd]ebug/
