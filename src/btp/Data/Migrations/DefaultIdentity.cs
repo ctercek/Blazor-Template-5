@@ -9,13 +9,17 @@
 
 namespace btp.Data.Migrations
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Net.Mime;
     using System.Text.Json;
 
+    using btp.Areas.Identity;
     using btp.Data.Models;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Migrations;
 
     /// <summary>
@@ -49,12 +53,34 @@ namespace btp.Data.Migrations
             if (File.Exists(pathToFile))
             {
                 List<MigrationUser> users = this.GetUsers(pathToFile);
-                var hasher = new PasswordHasher<IdentityUser>();
+                ////var hasher = new PasswordHasher<IdentityUser>();
+                var hasher = new PasswordHasher<ApplicationUser>();
 
                 foreach (MigrationUser user in users)
                 {
-                    
+                    /*
+                    ApplicationUser huser = new ApplicationUser
+                                                {
+                                                    Id = user.Id,
+                                                    UserName = user.UserName,
+                                                    NormalizedUserName = user.NormalizedUserName,
+                                                    Email = user.Email,
+                                                    NormalizedEmail = user.NormalizedEmail,
+                                                    PasswordHash = "Example1",
+                                                    AccessFailedCount = user.AccessFailedCount,
+                                                    EmailConfirmed = user.EmailConfirmed,
+                                                    PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                                                    TwoFactorEnabled = user.TwoFactorEnabled,
+                                                    LockoutEnabled = user.LockoutEnabled,
+                                                    SecurityStamp = user.SecurityStamp,
+                                                    ConcurrencyStamp = user.ConcurrencyStamp,
+                                                    FirstName = user.FirstName,
+                                                    LastName = user.LastName
+                                                };
+                    */
+
                     string password = hasher.HashPassword(null, user.Password);
+                    
 
                     this.migrationBuilder.InsertData(
                         table: "AspNetUsers",
@@ -188,15 +214,15 @@ namespace btp.Data.Migrations
                         values: new object[,]
                                     {
                                         {
-                                            address.AddressId, 
-                                            address.UserId, 
-                                            address.Default, 
-                                            address.Name, 
+                                            address.AddressId,
+                                            address.UserId,
+                                            address.Default,
+                                            address.Name,
                                             address.AddressOne,
-                                            address.AddressTwo, 
-                                            address.AddressThree, 
-                                            address.City, 
-                                            address.State, 
+                                            address.AddressTwo,
+                                            address.AddressThree,
+                                            address.City,
+                                            address.State,
                                             address.ZipCode
                                         }
                                     });
