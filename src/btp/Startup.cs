@@ -56,13 +56,20 @@ namespace btp
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    this.Configuration.GetConnectionString("DefaultConnection")));
+                    this.Configuration.GetConnectionString("DefaultConnection"),
+                    options => options.EnableRetryOnFailure()));
 
             //// services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             ////    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.Configure<PasswordHasherOptions>(option =>
+                {
+                    option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+                    option.IterationCount = 12000;
+                });
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -73,6 +80,7 @@ namespace btp
 
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSyncfusionBlazor();
+
         }
 
         /// <summary>
@@ -105,9 +113,10 @@ namespace btp
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

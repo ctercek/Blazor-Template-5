@@ -3,9 +3,11 @@
 @using btp.Data.Models;
 @using btp.Data.Services
 @using Syncfusion.Blazor.Grids
-@inject UserInfoService UserInfoService
-@inject AddressService AddressService
-@inject PhoneService PhoneService
+@*
+    @inject UserInfoService UserInfoService
+    @inject AddressService AddressService
+    @inject PhoneService PhoneService
+*@
 
 <h3>My Information</h3>
 
@@ -19,18 +21,18 @@
     </div>
     <div class="form-group">
         <label for="FirstName">First Name</label>
-        <InputText @bind-Value="_currentUserInfo.FirstName" class="form-control" id="FirstName"/>
+        <InputText @bind-Value="_currentUserInfo.FirstName" class="form-control" id="FirstName" />
     </div>
     <div class="form-group">
         <label for="LastName">Last Name</label>
-        <InputText @bind-Value="_currentUserInfo.LastName" class="form-control" id="LastName"/>
+        <InputText @bind-Value="_currentUserInfo.LastName" class="form-control" id="LastName" />
     </div>
-    <DataAnnotationsValidator/>
-    <input type="submit" class="btn btn-primary" value="Save"/>
+    <DataAnnotationsValidator />
+    <input type="submit" class="btn btn-primary" value="Save" />
 </EditForm>
 
 
-<div>
+@*<div>
 
     <SfGrid ID="addressGrid" DataSource="@_addresses" AllowPaging="true" AllowFiltering="false" AllowReordering="true"
             AllowResizing="true" AllowGrouping="false" AllowExcelExport="true" AllowSelection="true" EnableHover="true"
@@ -67,6 +69,6 @@
             <GridColumn Field="PhoneNumber" HeaderText="Phone Number" TextAlign="TextAlign.Center" Width="150"></GridColumn>
         </GridColumns>
     </SfGrid>
-</div>
+</div>*@
 
 

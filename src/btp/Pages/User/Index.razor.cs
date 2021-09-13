@@ -35,12 +35,12 @@ namespace btp.Pages.User
 
         protected override async Task OnInitializedAsync()
         {
-            _currentUser = UserInfoService.GetCurrentUser();
-            _currentUserId = UserInfoService.GetCurrentUserId();
-            _currentUserInfo = (ApplicationUser)(await this.UserInfoService.GetUsersAsync(this._currentUser)).FirstOrDefault();
-            _addresses = await AddressService.GetAddressesAsync(_currentUser);
-            _phones = await PhoneService.GetPhonesAsync(_currentUser);
-            _context = new EditContext(_currentUserInfo);
+            //_currentUser = UserInfoService.GetCurrentUser();
+            //_currentUserId = UserInfoService.GetCurrentUserId();
+            //_currentUserInfo = (ApplicationUser)(await this.UserInfoService.GetUsersAsync(this._currentUser)).FirstOrDefault();
+            //_addresses = await AddressService.GetAddressesAsync(_currentUser);
+            //_phones = await PhoneService.GetPhonesAsync(_currentUser);
+            //_context = new EditContext(_currentUserInfo);
         }
 
         public void ValidFormSubmittedUser(EditContext context)
@@ -60,59 +60,59 @@ namespace btp.Pages.User
 
         public void ActionBeginHandler(ActionEventArgs<btp.Data.Models.AspNetAddress> args)
         {
-            var t = args.Data;
+            //var t = args.Data;
 
-            switch (args.RequestType)
-            {
-                case Syncfusion.Blazor.Grids.Action.Save:
-                    if (args.Action == "Add")
-                    {
-                        t.UserId = _currentUserId;
-                        AddressService.AddAddress(t);
-                    }
-                    else
-                    {
-                        t.UserId = _currentUserId;
-                        AddressService.UpdateAddress(t);
-                    }
-                    break;
-                case Syncfusion.Blazor.Grids.Action.Delete:
-                    AddressService.RemoveAddress(t);
-                    break;
-                default:
-                    Console.WriteLine(args.RequestType);
-                    break;
+            //switch (args.RequestType)
+            //{
+            //    case Syncfusion.Blazor.Grids.Action.Save:
+            //        if (args.Action == "Add")
+            //        {
+            //            t.UserId = _currentUserId;
+            //            AddressService.AddAddress(t);
+            //        }
+            //        else
+            //        {
+            //            t.UserId = _currentUserId;
+            //            AddressService.UpdateAddress(t);
+            //        }
+            //        break;
+            //    case Syncfusion.Blazor.Grids.Action.Delete:
+            //        AddressService.RemoveAddress(t);
+            //        break;
+            //    default:
+            //        Console.WriteLine(args.RequestType);
+            //        break;
 
-            }
+            //}
         }
 
         public void ActionBeginHandler(ActionEventArgs<btp.Data.Models.AspNetPhone> args)
         {
 
-            var t = args.Data;
+            //var t = args.Data;
 
-            switch (args.RequestType)
-            {
-                case Syncfusion.Blazor.Grids.Action.Save:
-                    if (args.Action == "Add")
-                    {
-                        t.UserId = _currentUserId;
-                        PhoneService.AddPhone(t);
-                    }
-                    else  //Update
-                    {
-                        t.UserId = _currentUserId;
-                        PhoneService.UpdatePhone(t);
-                    }
+            //switch (args.RequestType)
+            //{
+            //    case Syncfusion.Blazor.Grids.Action.Save:
+            //        if (args.Action == "Add")
+            //        {
+            //            t.UserId = _currentUserId;
+            //            PhoneService.AddPhone(t);
+            //        }
+            //        else  //Update
+            //        {
+            //            t.UserId = _currentUserId;
+            //            PhoneService.UpdatePhone(t);
+            //        }
 
-                    break;
-                case Syncfusion.Blazor.Grids.Action.Delete:
-                    PhoneService.RemovePhone(t);
-                    break;
-                default:
-                    Console.WriteLine(args.RequestType);
-                    break;
-            }
+            //        break;
+            //    case Syncfusion.Blazor.Grids.Action.Delete:
+            //        PhoneService.RemovePhone(t);
+            //        break;
+            //    default:
+            //        Console.WriteLine(args.RequestType);
+            //        break;
+            //}
         }
 
 
