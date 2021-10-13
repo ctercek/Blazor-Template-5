@@ -13,6 +13,7 @@ namespace btp.Data
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection.Metadata;
     using System.Text.Json;
     using System.Threading.Tasks;
 
@@ -21,6 +22,8 @@ namespace btp.Data
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+
+    using Syncfusion.Blazor.DropDowns;
 
     /// <summary>
     /// The identity data seeder.
@@ -32,15 +35,21 @@ namespace btp.Data
         /// </summary>
         private readonly UserManager<ApplicationUser> userManager;
 
+        private readonly RoleManager<IdentityRole> roleManager;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityDataSeeder"/> class.
         /// </summary>
         /// <param name="userManager">
         /// The user manager.
         /// </param>
-        public IdentityDataSeeder(UserManager<ApplicationUser> userManager)
+        /// <param name="roleManager">
+        /// The role Manager.
+        /// </param>
+        public IdentityDataSeeder(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         /// <summary>
@@ -49,15 +58,42 @@ namespace btp.Data
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        public async Task SeedUsersAsync()
+        public async Task SeedAsync()
         {
+            string rolesFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "roles.json");
+            string usersFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "users.json");
+            string userRolesFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "userroles.json");
 
-            string pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "users.json");
-            if (File.Exists(pathToFile))
+            if (File.Exists(rolesFile))
             {
-                string jsonString = await File.ReadAllTextAsync(pathToFile);
+                string jsonString = await File.ReadAllTextAsync(rolesFile);
 
-                List<MigrationUser> users = JsonSerializer.Deserialize<List<MigrationUser>>(jsonString);
+                List<MigrationRole> roles = JsonSerializer.Deserialize<List<MigrationRole>>(jsonString);
+
+                if (roles != null)
+                {
+                    foreach (var role in roles)
+                    {
+                        var appRole = new IdentityRole
+                                                 {
+                                                     Id = role.Id,
+                                                     Name = role.Name,
+                                                     NormalizedName = role.NormalizedName
+                                                 };
+                        await this.CreateRoleAsync(appRole);
+                    }
+                }
+            }
+
+            if (File.Exists(usersFile))
+            {
+                string jsonUsersString = await File.ReadAllTextAsync(usersFile);
+                string jsonUserRolesString = await File.ReadAllTextAsync(userRolesFile);
+                string jsonRolesString = await File.ReadAllTextAsync(rolesFile);
+
+                List<MigrationUser> users = JsonSerializer.Deserialize<List<MigrationUser>>(jsonUsersString);
+                List<MigrationUserRoles> userRoles = JsonSerializer.Deserialize<List<MigrationUserRoles>>(jsonUserRolesString);
+                List<MigrationRole> roles = JsonSerializer.Deserialize<List<MigrationRole>>(jsonRolesString);
 
                 if (users != null)
                 {
@@ -76,6 +112,24 @@ namespace btp.Data
                                           };
 
                         await this.CreateUserAsync(appUser, user.Password);
+
+                        var curUserRoles = (from t in userRoles
+                                                                 join r in roles on t.RoleId equals r.Id
+                                                                 where t.UserId == user.Id
+                                                                 select new { t.RoleId, r.Name }).ToList();
+
+                        if (curUserRoles.Count > 0)
+                        {
+                            foreach (var role in curUserRoles)
+                            {
+                                var roleExists = await this.userManager.IsInRoleAsync(appUser, role.Name);
+
+                                if (!roleExists)
+                                {
+                                    await this.userManager.AddToRoleAsync(appUser, role.Name);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -102,6 +156,22 @@ namespace btp.Data
             }
         }
 
-
+        /// <summary>
+        /// The create role async.
+        /// </summary>
+        /// <param name="role">
+        /// The role.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        private async Task CreateRoleAsync(IdentityRole role)
+        {
+            var exits = await this.roleManager.RoleExistsAsync(role.Name);
+            if (!exits)
+            {
+                await this.roleManager.CreateAsync(role);
+            }
+        }
     }
 }

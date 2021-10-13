@@ -52,7 +52,7 @@ namespace btp.Data
             {
                 var seeder = scope.ServiceProvider.GetRequiredService<IdentityDataSeeder>();
 
-                await seeder.SeedUsersAsync();
+                await seeder.SeedAsync();
             }
         }
 
