@@ -9,6 +9,8 @@
 
 namespace btp
 {
+    using System;
+
     using btp.Areas.Identity;
     using btp.Data;
     using btp.Data.Services;
@@ -47,17 +49,19 @@ namespace btp
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to add services to the container.
-        /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// For more information on how to configure your application, visit
         /// </summary>
         /// <param name="services">
         /// The services.
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    this.Configuration.GetConnectionString("DefaultConnection"),
-                    options => options.EnableRetryOnFailure()));
+                    this.Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<ApplicationDbContext>();
 
             //// services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             ////    .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -65,21 +69,18 @@ namespace btp
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.Configure<PasswordHasherOptions>(option =>
-                {
-                    option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
-                    option.IterationCount = 12000;
-                });
-
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddScoped<UserInfoService>();
             services.AddScoped<AddressService>();
             services.AddScoped<PhoneService>();
+            services.AddScoped<IdentityDataSeeder>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSyncfusionBlazor();
+
+            services.AddHostedService<SetupIdentityDataSeeder>();
 
         }
 
@@ -116,7 +117,6 @@ namespace btp
 
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {
