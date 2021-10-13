@@ -35,7 +35,7 @@ namespace btp.Data
         /// Gets or sets the application users.
         /// </summary>
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the asp net addresses.
         /// </summary>

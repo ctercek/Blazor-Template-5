@@ -9,6 +9,8 @@
 
 namespace btp
 {
+    using System;
+
     using btp.Areas.Identity;
     using btp.Data;
     using btp.Data.Services;
@@ -54,9 +56,12 @@ namespace btp
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     this.Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<ApplicationDbContext>();
 
             //// services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             ////    .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -70,9 +75,13 @@ namespace btp
             services.AddScoped<UserInfoService>();
             services.AddScoped<AddressService>();
             services.AddScoped<PhoneService>();
+            services.AddScoped<IdentityDataSeeder>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSyncfusionBlazor();
+
+            services.AddHostedService<SetupIdentityDataSeeder>();
+
         }
 
         /// <summary>
@@ -105,7 +114,7 @@ namespace btp
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

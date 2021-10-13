@@ -9,10 +9,12 @@
 
 namespace btp.Data.Migrations
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text.Json;
 
+    using btp.Areas.Identity;
     using btp.Data.Models;
 
     using Microsoft.AspNetCore.Identity;
@@ -49,11 +51,11 @@ namespace btp.Data.Migrations
             if (File.Exists(pathToFile))
             {
                 List<MigrationUser> users = this.GetUsers(pathToFile);
-                var hasher = new PasswordHasher<IdentityUser>();
+                var hasher = new PasswordHasher<ApplicationUser>();
 
                 foreach (MigrationUser user in users)
                 {
-                    
+
                     string password = hasher.HashPassword(null, user.Password);
 
                     this.migrationBuilder.InsertData(
@@ -98,6 +100,9 @@ namespace btp.Data.Migrations
                             }
                         });
                 }
+
+
+
 
             }
         }
@@ -188,15 +193,15 @@ namespace btp.Data.Migrations
                         values: new object[,]
                                     {
                                         {
-                                            address.AddressId, 
-                                            address.UserId, 
-                                            address.Default, 
-                                            address.Name, 
+                                            address.AddressId,
+                                            address.UserId,
+                                            address.Default,
+                                            address.Name,
                                             address.AddressOne,
-                                            address.AddressTwo, 
-                                            address.AddressThree, 
-                                            address.City, 
-                                            address.State, 
+                                            address.AddressTwo,
+                                            address.AddressThree,
+                                            address.City,
+                                            address.State,
                                             address.ZipCode
                                         }
                                     });
