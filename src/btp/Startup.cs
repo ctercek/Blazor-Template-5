@@ -9,8 +9,6 @@
 
 namespace btp
 {
-    using System;
-
     using btp.Areas.Identity;
     using btp.Data;
     using btp.Data.Services;
@@ -56,12 +54,10 @@ namespace btp
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    this.Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddScoped<ApplicationDbContext>();
+                    this.Configuration.GetConnectionString("DefaultConnection"),
+                    options => options.EnableRetryOnFailure()));
 
             //// services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             ////    .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -69,18 +65,21 @@ namespace btp
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.Configure<PasswordHasherOptions>(option =>
+                {
+                    option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+                    option.IterationCount = 12000;
+                });
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddScoped<UserInfoService>();
             services.AddScoped<AddressService>();
             services.AddScoped<PhoneService>();
-            services.AddScoped<IdentityDataSeeder>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSyncfusionBlazor();
-
-            services.AddHostedService<SetupIdentityDataSeeder>();
 
         }
 
@@ -117,6 +116,7 @@ namespace btp
 
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
