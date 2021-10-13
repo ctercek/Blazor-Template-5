@@ -2,6 +2,8 @@
 
 namespace btp.Data.Migrations
 {
+    using System;
+
     public partial class securitymodels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,12 +71,12 @@ namespace btp.Data.Migrations
                 });
 
             //Create Users and roles if necessary
-            var defaultIdentity = new DefaultIdentity(migrationBuilder);
-            defaultIdentity.CreateUsers();
-            defaultIdentity.CreateRoles();
-            defaultIdentity.CreateUserToRoles();
-            defaultIdentity.CreateAddress();
-            defaultIdentity.CreatePhone();
+            //var defaultIdentity = new DefaultIdentity(migrationBuilder);
+            //defaultIdentity.CreateUsers();
+            //defaultIdentity.CreateRoles();
+            //defaultIdentity.CreateUserToRoles();
+            //defaultIdentity.CreateAddress();
+            //defaultIdentity.CreatePhone();
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
