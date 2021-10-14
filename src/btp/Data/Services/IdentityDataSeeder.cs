@@ -7,23 +7,18 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace btp.Data
+namespace btp.Data.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reflection.Metadata;
     using System.Text.Json;
     using System.Threading.Tasks;
 
     using btp.Areas.Identity;
     using btp.Data.Models;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
 
-    using Syncfusion.Blazor.DropDowns;
+    using Microsoft.AspNetCore.Identity;
 
     /// <summary>
     /// The identity data seeder.

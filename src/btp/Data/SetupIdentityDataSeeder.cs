@@ -13,6 +13,8 @@ namespace btp.Data
     using System.Threading;
     using System.Threading.Tasks;
 
+    using btp.Data.Services;
+
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
