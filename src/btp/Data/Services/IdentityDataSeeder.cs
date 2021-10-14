@@ -35,6 +35,9 @@ namespace btp.Data
         /// </summary>
         private readonly UserManager<ApplicationUser> userManager;
 
+        /// <summary>
+        /// The role manager.
+        /// </summary>
         private readonly RoleManager<IdentityRole> roleManager;
 
         /// <summary>

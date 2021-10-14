@@ -18,6 +18,7 @@ userroles.json
 
 # Initialization Folder
 /src/btp/Initialization/**
+/src/btp/Initialization
 
 # Build results
 [Dd]ebug/
