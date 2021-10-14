@@ -1,74 +1,73 @@
 ﻿@page "/user/index"
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize]
 @using btp.Data.Models;
 @using btp.Data.Services
 @using Syncfusion.Blazor.Grids
-@*
-    @inject UserInfoService UserInfoService
-    @inject AddressService AddressService
-    @inject PhoneService PhoneService
-*@
+@inject UserInfoService UserInfoService
+@inject AddressService AddressService
+@inject PhoneService PhoneService
 
 <h3>My Information</h3>
 
 <br />
 
 
-<EditForm Model="@_context" OnValidSubmit="@ValidFormSubmittedUser">
+
+<EditForm Model="@context" OnValidSubmit="@ValidFormSubmittedUser">
     <div class="form-group">
         <label for="Email">Email</label>
-        <InputText @bind-Value="_currentUserInfo.Email" class="form-control" id="Email" />
+        <InputText @bind-Value="currentUserInfo.Email" class="form-control" id="Email" />
     </div>
     <div class="form-group">
         <label for="FirstName">First Name</label>
-        <InputText @bind-Value="_currentUserInfo.FirstName" class="form-control" id="FirstName" />
+        <InputText @bind-Value="currentUserInfo.FirstName" class="form-control" id="FirstName" />
     </div>
     <div class="form-group">
         <label for="LastName">Last Name</label>
-        <InputText @bind-Value="_currentUserInfo.LastName" class="form-control" id="LastName" />
+        <InputText @bind-Value="currentUserInfo.LastName" class="form-control" id="LastName" />
     </div>
     <DataAnnotationsValidator />
     <input type="submit" class="btn btn-primary" value="Save" />
 </EditForm>
 
 
-@*<div>
+    <div>
 
-    <SfGrid ID="addressGrid" DataSource="@_addresses" AllowPaging="true" AllowFiltering="false" AllowReordering="true"
-            AllowResizing="true" AllowGrouping="false" AllowExcelExport="true" AllowSelection="true" EnableHover="true"
-            AllowSorting="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })">
-        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Normal"></GridEditSettings>
-        <GridPageSettings PageSizes="true"></GridPageSettings>
-        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-        <GridEvents OnActionBegin="ActionBeginHandler" TValue="btp.Data.Models.AspNetAddress"></GridEvents>
-        <GridColumns>
-            <GridColumn Type='ColumnType.CheckBox' Width="50"></GridColumn>
-            <GridColumn Field="AddressId" HeaderText="Address ID" IsPrimaryKey="true" Visible="false" TextAlign="TextAlign.Center" Width="120"></GridColumn>
-            <GridColumn Field="Name" HeaderText="Address Name" TextAlign="TextAlign.Center" Width="120"></GridColumn>
-            <GridColumn Field="AddressOne" HeaderText="Address One" TextAlign="TextAlign.Center" Width="200"></GridColumn>
-            <GridColumn Field="AddressTwo" HeaderText="Address Two" TextAlign="TextAlign.Center" Width="100"></GridColumn>
-            <GridColumn Field="AddressThree" HeaderText="Address Three" TextAlign="TextAlign.Center" Width="100"></GridColumn>
-            <GridColumn Field="City" HeaderText="City" TextAlign="TextAlign.Center" Width="100"></GridColumn>
-            <GridColumn Field="State" HeaderText="State" TextAlign="TextAlign.Center" Width="100"></GridColumn>
-            <GridColumn Field="ZipCode" HeaderText="Zip" TextAlign="TextAlign.Center" Width="100"></GridColumn>
-        </GridColumns>
-    </SfGrid>
-</div>
-<div>
-    <SfGrid ID="phoneGrid" DataSource="@_phones" AllowPaging="true" AllowFiltering="false" AllowReordering="true"
-            AllowResizing="true" AllowGrouping="false" AllowExcelExport="true" AllowSelection="true" EnableHover="true"
-            AllowSorting="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })">
-        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Normal"></GridEditSettings>
-        <GridPageSettings PageSizes="true"></GridPageSettings>
-        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-        <GridEvents OnActionBegin="ActionBeginHandler" TValue="btp.Data.Models.AspNetPhone"></GridEvents>
-        <GridColumns>
-            <GridColumn Type='ColumnType.CheckBox' Width="50"></GridColumn>
-            <GridColumn Field="PhoneId" HeaderText="Phone ID" IsPrimaryKey="true" Visible="false" TextAlign="TextAlign.Center" Width="120"></GridColumn>
-            <GridColumn Field="Name" HeaderText="Phone Name" TextAlign="TextAlign.Center" Width="120"></GridColumn>
-            <GridColumn Field="PhoneNumber" HeaderText="Phone Number" TextAlign="TextAlign.Center" Width="150"></GridColumn>
-        </GridColumns>
-    </SfGrid>
-</div>*@
+        <SfGrid ID="addressGrid" DataSource="@addresses" AllowPaging="true" AllowFiltering="false" AllowReordering="true"
+                AllowResizing="true" AllowGrouping="false" AllowExcelExport="true" AllowSelection="true" EnableHover="true"
+                AllowSorting="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })">
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Normal"></GridEditSettings>
+            <GridPageSettings PageSizes="true"></GridPageSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridEvents OnActionBegin="ActionBeginHandler" TValue="btp.Data.Models.AspNetAddress"></GridEvents>
+            <GridColumns>
+                <GridColumn Type='ColumnType.CheckBox' Width="50"></GridColumn>
+                <GridColumn Field="AddressId" HeaderText="Address ID" IsPrimaryKey="true" Visible="false" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+                <GridColumn Field="Name" HeaderText="Address Name" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+                <GridColumn Field="AddressOne" HeaderText="Address One" TextAlign="TextAlign.Center" Width="200"></GridColumn>
+                <GridColumn Field="AddressTwo" HeaderText="Address Two" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                <GridColumn Field="AddressThree" HeaderText="Address Three" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                <GridColumn Field="City" HeaderText="City" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                <GridColumn Field="State" HeaderText="State" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                <GridColumn Field="ZipCode" HeaderText="Zip" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+            </GridColumns>
+        </SfGrid>
+    </div>
+    <div>
+        <SfGrid ID="phoneGrid" DataSource="@phones" AllowPaging="true" AllowFiltering="false" AllowReordering="true"
+                AllowResizing="true" AllowGrouping="false" AllowExcelExport="true" AllowSelection="true" EnableHover="true"
+                AllowSorting="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })">
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Normal"></GridEditSettings>
+            <GridPageSettings PageSizes="true"></GridPageSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+            <GridEvents OnActionBegin="ActionBeginHandler" TValue="btp.Data.Models.AspNetPhone"></GridEvents>
+            <GridColumns>
+                <GridColumn Type='ColumnType.CheckBox' Width="50"></GridColumn>
+                <GridColumn Field="PhoneId" HeaderText="Phone ID" IsPrimaryKey="true" Visible="false" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+                <GridColumn Field="Name" HeaderText="Phone Name" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+                <GridColumn Field="PhoneNumber" HeaderText="Phone Number" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+            </GridColumns>
+        </SfGrid>
+    </div>
 
 
