@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Models\" />
+    <Folder Include="Initialization\sql_scripts\btp\" />
   </ItemGroup>
 
 </Project>
