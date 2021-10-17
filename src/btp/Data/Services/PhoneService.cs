@@ -131,6 +131,7 @@ namespace btp.Data.Services
 
             ph.Name = phone.Name;
             ph.PhoneNumber = phone.PhoneNumber;
+            ph.UseForTextMessaging = phone.UseForTextMessaging;
             this.context.SaveChanges();
         }
 
