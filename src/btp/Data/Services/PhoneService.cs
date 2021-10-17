@@ -9,6 +9,7 @@
 
 namespace btp.Data.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -86,9 +87,36 @@ namespace btp.Data.Services
         /// </param>
         public void AddPhone(AspNetPhone phone)
         {
-            this.context.AspNetPhones.Add(phone);
+            if (phone.PhoneId == null)
+            {
+                phone.PhoneId = Guid.NewGuid().ToString();
+            }
 
-            this.context.SaveChanges();
+            if (!this.context.AspNetPhones.Any(c => c.PhoneId == phone.PhoneId))
+            {
+                this.context.AspNetPhones.Add(phone);
+                this.context.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// The add phone async.
+        /// </summary>
+        /// <param name="phone">
+        /// The phone.
+        /// </param>
+        public void AddPhoneAsync(AspNetPhone phone)
+        {
+            if (phone.PhoneId == null)
+            {
+                phone.PhoneId = Guid.NewGuid().ToString();
+            }
+
+            if (!this.context.AspNetPhones.Any(c => c.PhoneId == phone.PhoneId))
+            {
+                this.context.AspNetPhones.Add(phone);
+                this.context.SaveChangesAsync();
+            }
         }
 
         /// <summary>

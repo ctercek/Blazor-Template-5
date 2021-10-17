@@ -106,6 +106,11 @@ namespace btp.Data.Services
         /// </param>
         public void AddAddressAsync(AspNetAddress address)
         {
+            if (address.AddressId == null)
+            {
+                address.AddressId = Guid.NewGuid().ToString();
+            }
+
             if (!this.context.AspNetAddresses.Any(c => c.AddressId == address.AddressId))
             {
                 this.context.AspNetAddresses.Add(address);
