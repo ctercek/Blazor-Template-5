@@ -66,11 +66,11 @@ namespace btp.Pages.User
         /// </returns>
         protected override async Task OnInitializedAsync()
         {
-            this.currentUser = UserInfoService.GetCurrentUser();
-            this.currentUserId = UserInfoService.GetCurrentUserId();
-            this.currentUserInfo = (ApplicationUser)(await this.UserInfoService.GetUsersAsync(this.currentUser)).FirstOrDefault();
-            this.addresses = await AddressService.GetAddressesAsync(this.currentUser);
-            this.phones = await PhoneService.GetPhonesAsync(this.currentUser);
+            this.currentUser = this.userInfoService.GetCurrentUser();
+            this.currentUserId = this.userInfoService.GetCurrentUserId();
+            this.currentUserInfo = (ApplicationUser)(await this.userInfoService.GetUsersAsync(this.currentUser)).FirstOrDefault();
+            this.addresses = await this.addressService.GetAddressesAsync(this.currentUser);
+            this.phones = await this.phoneService.GetPhonesAsync(this.currentUser);
             if (this.currentUserInfo != null)
             {
                 this.context = new EditContext(this.currentUserInfo);
@@ -113,16 +113,16 @@ namespace btp.Pages.User
                     if (args.Action == "Add")
                     {
                         t.UserId = currentUserId;
-                        AddressService.AddAddress(t);
+                        this.addressService.AddAddress(t);
                     }
                     else
                     {
                         t.UserId = currentUserId;
-                        AddressService.UpdateAddress(t);
+                        this.addressService.UpdateAddress(t);
                     }
                     break;
                 case Syncfusion.Blazor.Grids.Action.Delete:
-                    AddressService.RemoveAddress(t);
+                    this.addressService.RemoveAddress(t);
                     break;
                 default:
                     Console.WriteLine(args.RequestType);
@@ -147,17 +147,17 @@ namespace btp.Pages.User
                     if (args.Action == "Add")
                     {
                         t.UserId = currentUserId;
-                        PhoneService.AddPhone(t);
+                        this.phoneService.AddPhone(t);
                     }
                     else  //Update
                     {
                         t.UserId = currentUserId;
-                        PhoneService.UpdatePhone(t);
+                        this.phoneService.UpdatePhone(t);
                     }
 
                     break;
                 case Syncfusion.Blazor.Grids.Action.Delete:
-                    PhoneService.RemovePhone(t);
+                    this.phoneService.RemovePhone(t);
                     break;
                 default:
                     Console.WriteLine(args.RequestType);

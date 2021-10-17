@@ -9,6 +9,7 @@
 
 namespace btp.Data.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -85,9 +86,31 @@ namespace btp.Data.Services
         /// </param>
         public void AddAddress(AspNetAddress address)
         {
-            this.context.AspNetAddresses.Add(address);
+            if (address.AddressId == null)
+            {
+                address.AddressId = Guid.NewGuid().ToString();
+            }
 
-            this.context.SaveChanges();
+            if (!this.context.AspNetAddresses.Any(c => c.AddressId == address.AddressId))
+            {
+                this.context.AspNetAddresses.Add(address);
+                this.context.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// The add address async.
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        public void AddAddressAsync(AspNetAddress address)
+        {
+            if (!this.context.AspNetAddresses.Any(c => c.AddressId == address.AddressId))
+            {
+                this.context.AspNetAddresses.Add(address);
+                this.context.SaveChangesAsync();
+            }
         }
 
         /// <summary>
