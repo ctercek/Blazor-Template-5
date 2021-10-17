@@ -19,6 +19,7 @@ namespace btp.Data.Services
     using btp.Data.Models;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
     /// <summary>
     /// The identity data seeder.
@@ -36,6 +37,11 @@ namespace btp.Data.Services
         private readonly RoleManager<IdentityRole> roleManager;
 
         /// <summary>
+        /// The address service.
+        /// </summary>
+        private readonly AddressService addressService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IdentityDataSeeder"/> class.
         /// </summary>
         /// <param name="userManager">
@@ -44,10 +50,14 @@ namespace btp.Data.Services
         /// <param name="roleManager">
         /// The role Manager.
         /// </param>
-        public IdentityDataSeeder(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        /// <param name="addressService">
+        /// The address Service.
+        /// </param>
+        public IdentityDataSeeder(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, AddressService addressService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.addressService = addressService;
         }
 
         /// <summary>
@@ -61,6 +71,7 @@ namespace btp.Data.Services
             string rolesFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "roles.json");
             string usersFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "users.json");
             string userRolesFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "userroles.json");
+            string addressFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "address.json");
 
             if (File.Exists(rolesFile))
             {
@@ -128,6 +139,36 @@ namespace btp.Data.Services
                                 }
                             }
                         }
+                    }
+                }
+            }
+
+            if (File.Exists(addressFile))
+            {
+                string jsonString = await File.ReadAllTextAsync(addressFile);
+
+
+                List<MigrationAddress> addresses = JsonSerializer.Deserialize<List<MigrationAddress>>(jsonString);
+
+                if (addresses != null)
+                {
+                    foreach (var address in addresses)
+                    {
+                        AspNetAddress newAddress = new AspNetAddress
+                                                       {
+                                                            AddressId = address.AddressId,
+                                                            AddressOne = address.AddressOne,
+                                                            AddressTwo = address.AddressTwo,
+                                                            AddressThree = address.AddressThree,
+                                                            City = address.City,
+                                                            Default = address.Default,
+                                                            Name = address.Name,
+                                                            State = address.State,
+                                                            UserId = address.UserId,
+                                                            ZipCode = address.ZipCode
+                                                       };
+
+                        this.addressService.AddAddressAsync(newAddress);
                     }
                 }
             }

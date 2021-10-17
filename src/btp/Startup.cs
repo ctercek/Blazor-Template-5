@@ -126,23 +126,5 @@ namespace btp
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
-
-        /// <summary>
-        /// The pass generate.
-        /// </summary>
-        /// <param name="user">
-        /// The user.
-        /// </param>
-        /// <param name="password">
-        /// The password.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string PassGenerate(ApplicationUser user, string password)
-        {
-            var passHash = new PasswordHasher<ApplicationUser>();
-            return passHash.HashPassword(user, password);
-        }
     }
 }
