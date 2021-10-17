@@ -42,6 +42,11 @@ namespace btp.Data.Services
         private readonly AddressService addressService;
 
         /// <summary>
+        /// The phone service.
+        /// </summary>
+        private readonly PhoneService phoneService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IdentityDataSeeder"/> class.
         /// </summary>
         /// <param name="userManager">
@@ -53,11 +58,15 @@ namespace btp.Data.Services
         /// <param name="addressService">
         /// The address Service.
         /// </param>
-        public IdentityDataSeeder(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, AddressService addressService)
+        /// <param name="phoneService">
+        /// The phone Service.
+        /// </param>
+        public IdentityDataSeeder(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, AddressService addressService, PhoneService phoneService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.addressService = addressService;
+            this.phoneService = phoneService;
         }
 
         /// <summary>
@@ -72,6 +81,7 @@ namespace btp.Data.Services
             string usersFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "users.json");
             string userRolesFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "userroles.json");
             string addressFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "address.json");
+            string phoneFile = Path.Combine(Directory.GetCurrentDirectory(), "Initialization", "phones.json");
 
             if (File.Exists(rolesFile))
             {
@@ -169,6 +179,30 @@ namespace btp.Data.Services
                                                        };
 
                         this.addressService.AddAddressAsync(newAddress);
+                    }
+                }
+            }
+
+            if (File.Exists(phoneFile))
+            {
+                string jsonString = await File.ReadAllTextAsync(phoneFile);
+
+
+                List<MigrationPhone> phones = JsonSerializer.Deserialize<List<MigrationPhone>>(jsonString);
+
+                if (phones != null)
+                {
+                    foreach (var phone in phones)
+                    {
+                        AspNetPhone newPhone = new AspNetPhone
+                        {
+                          PhoneId = phone.PhoneId,
+                          Name = phone.Name,
+                          PhoneNumber = phone.PhoneNumber,
+                          UserId = phone.UserId
+                        };
+
+                        this.phoneService.AddPhoneAsync(newPhone);
                     }
                 }
             }
