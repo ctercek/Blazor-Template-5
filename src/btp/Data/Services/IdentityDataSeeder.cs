@@ -199,7 +199,8 @@ namespace btp.Data.Services
                           PhoneId = phone.PhoneId,
                           Name = phone.Name,
                           PhoneNumber = phone.PhoneNumber,
-                          UserId = phone.UserId
+                          UserId = phone.UserId,
+                          UseForTextMessaging = phone.UseForTextMessaging
                         };
 
                         this.phoneService.AddPhoneAsync(newPhone);

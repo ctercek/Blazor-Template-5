@@ -34,5 +34,9 @@ namespace btp.Data.Models
         /// </summary>
         public string PhoneNumber { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether use for text messaging.
+        /// </summary>
+        public bool UseForTextMessaging { get; set; }
     }
 }
